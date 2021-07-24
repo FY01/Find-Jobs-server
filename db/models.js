@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017/find-jobs')
 const conn = mongoose.connection
 conn.on('connected',()=>{
-    console.log('connect success!')
+    console.log('connect success! listening in port 4000')
 })
 
 //2.define/export Model
@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema({
     password: {type: String, required: true},
     type: {type: String, required: true}, // type: assassin/leader
     header: {type: String},
-    post: {type: String}, // position
+    task: {type: String}, // position
     info: {type: String},
     company: {type: String},
     salary: {type: String}

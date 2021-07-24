@@ -115,7 +115,7 @@
 ## 4、getUser(based on cookie)
 
 ### reqURL：
-	localhost:4000/user
+	localhost:4000/getUser
 
 ### reqMethod：
 	GET
