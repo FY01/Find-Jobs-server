@@ -83,6 +83,18 @@ router.get('/getUser',(req,res) => {
     res.send({code:0,data:user})
   })
 })
+/**
+ * getUserList based on type(assassin/leader)
+ * 1) success: {code: 0, data: user}
+ *
+ */
+router.get('/userList',(req,res) => {
+  const {type} = req.query
+  UserModel.find({type},filter,(error,users) => {
+    if (!error){}
+    res.send({code:0,data:users})
+  })
+})
 
 
 

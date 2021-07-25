@@ -150,7 +150,7 @@
 ## 5、getUserList
 
 ### reqURL：
-	localhost:4000/userlist
+	localhost:4000/userList
 
 ### reqMethod：
 	GET
