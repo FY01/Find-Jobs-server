@@ -186,7 +186,7 @@
 ## 6、get current user's chatList
 
 ### reqURL：
-	localhost:4000/msglist
+	localhost:4000/msgList
 
 ### reqMethod：
 	GET
@@ -234,7 +234,7 @@
 
 ## 7、 update information's status to be read
 ### reqURL：
-	localhost:4000/readmsg
+	localhost:4000/readMsg
 
 ### reqMethod：
 	post

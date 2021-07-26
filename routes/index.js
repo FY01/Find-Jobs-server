@@ -5,7 +5,7 @@ const md5 = require('blueimp-md5')
 
 const filter = {password:0,__v:0}
 
-const {UserModel} = require('../db/models')
+const {UserModel,ChatModel} = require('../db/models')
 /**  register
  * 1) success: userModel.save(),res.cookie(),{code: 0, data: {_id, username，type}，}
  * 2) fail: {code: 1, msg: 'user already exist'}
@@ -96,8 +96,37 @@ router.get('/userList',(req,res) => {
   })
 })
 
+/**
+ * get current user's chatList
+ * 1) success:
+ *
+ */
+router.get('/msgList',(req,res) => {
+  const {userId} = req.cookies
+  UserModel.find((error,userArray) => {
+    const users = userArray.reduce((users,{username,header,_id}) => {
+      users[_id] = {username,header}
+      return users
+    },{})
+    ChatModel.find({'$or': [{from: userId}, {to: userId}]}, filter, function (err, chatMsgs) {
+      res.send({code: 0, data: {users, chatMsgs}})
+    })
+  })
+})
+/**
+ * update information's status to be read
+ * 1) success: {code: 0, data: 2}
+ *
+ */
+router.post('/readMsg', function (req, res) {
 
+  const from = req.body.from
+  const to = req.cookies.userid
 
+  ChatModel.update({from, to, read: false}, {read: true}, {multi: true}, function (err, doc) {
+    res.send({code: 0, data: doc.nModified})
+  })
+})
 
 
 
