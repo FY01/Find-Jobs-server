@@ -121,9 +121,11 @@ router.get('/msgList',(req,res) => {
 router.post('/readMsg', function (req, res) {
 
   const from = req.body.from
-  const to = req.cookies.userid
+  const to = req.cookies.userId
+  console.log(to)
 
   ChatModel.update({from, to, read: false}, {read: true}, {multi: true}, function (err, doc) {
+    // console.log(doc)
     res.send({code: 0, data: doc.nModified})
   })
 })
