@@ -5,7 +5,7 @@
  * @Author: FY01
  * @Date: 2021-07-31 11:19:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-02 10:19:50
+ * @LastEditTime: 2022-03-02 11:19:22
  */
 /**
  * @Description: models:handle db's collection
@@ -15,6 +15,7 @@
 
 //1.连接到数据库
 const mongoose = require('mongoose')
+// 开发端
 // mongoose.connect('mongodb://localhost:27017/find-jobs')
 // server端数据库
 mongoose.connect('mongodb://0.0.0.0:20411/find-jobs')
