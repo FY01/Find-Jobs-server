@@ -3,26 +3,32 @@ const router = express.Router();
 //encrypt password
 const md5 = require('blueimp-md5')
 
-const filter = {password:0,__v:0}
+const filter = { password: 0, __v: 0 }
 
-const {UserModel,ChatModel} = require('../db/models')
+// 服务器地址
+// const baseURl = "120.77.232.204:8889"
+const baseURl = ""
+
+const { UserModel, ChatModel } = require('../db/models')
 /**  register
  * 1) success: userModel.save(),res.cookie(),{code: 0, data: {_id, username，type}，}
  * 2) fail: {code: 1, msg: 'user already exist'}
  */
-router.post('/register',(req,res) => {
+router.post(baseURl + '/register', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   //get data from req
-  const {username,password,type} = req.body
-  UserModel.findOne({username},(err,user) => {
+  const { username, password, type } = req.body
+  console.log("出发了")
+  UserModel.findOne({ username }, (err, user) => {
+
     if (user) {
-      res.send({code:1,msg:`name ${username} already exist`})
-    }else {
-      new UserModel({username,type,password:md5(password)}).save((err,user) => {
+      res.send({ code: 1, msg: `name ${username} already exist` })
+    } else {
+      new UserModel({ username, type, password: md5(password) }).save((err, user) => {
         // set a cookie back to browser
-        res.cookie('userId',user._id,{maxAge:1000*60*60*24*7})
-        const data = {username, type, _id:user._id} //do not send the password back
-        res.send({code:0,data})
+        res.cookie('userId', user._id, { maxAge: 1000 * 60 * 60 * 24 * 7 })
+        const data = { username, type, _id: user._id } //do not send the password back
+        res.send({ code: 0, data })
       })
     }
   })
@@ -31,17 +37,18 @@ router.post('/register',(req,res) => {
  * 1) success: res.cookie(),{code: 0, data: user}
  * 2) fail: {code: 1, msg: 'wrong username or wrong password'}
  */
-router.post('/login',(req,res) => {
+router.post(baseURl + '/login', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   //get data from req
-  const {username,password} = req.body
-  UserModel.findOne({username,password:md5(password)},filter,(err,user) => {
+  const { username, password } = req.body
+  UserModel.findOne({ username, password: md5(password) }, filter, (err, user) => {
     //set a filter to refuse return user.password and user.__v
     if (!user) {
-      res.send({code:1,msg:`wrong username or wrong password`})
-    }else {
+      res.send({ code: 1, msg: `wrong username or wrong password` })
+    } else {
       // set a cookie back to browser
-      res.cookie('userId',user._id,{maxAge:1000*60*60*24*7})
-      res.send({code:0,data:user})
+      res.cookie('userId', user._id, { maxAge: 1000 * 60 * 60 * 24 * 7 })
+      res.send({ code: 0, data: user })
     }
   })
 })
@@ -50,21 +57,22 @@ router.post('/login',(req,res) => {
  * 1) success: res.cookie(),{code: 0, data: user}
  * 2) fail: clearCookie(userId),{code: 1, msg: 'login first pls'}
  */
-router.post('/update',(req,res) => {
-  const {userId} = req.cookies
-  if (!userId){
-    res.send({code:1,msg:'login first pls'})
+router.post(baseURl + '/update', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { userId } = req.cookies
+  if (!userId) {
+    res.send({ code: 1, msg: 'login first pls' })
     return
   }
   const user = req.body
-  UserModel.findByIdAndUpdate({_id:userId},user,(error,oldUser) => {
-    if (!oldUser){
+  UserModel.findByIdAndUpdate({ _id: userId }, user, (error, oldUser) => {
+    if (!oldUser) {
       res.clearCookie(userId)
-      res.send({code:1,msg:'login first pls'})
-    }else {
-      const {username,type,_id} = oldUser
-      const data = Object.assign(user,{username,type,_id})
-      res.send({code:0,data})
+      res.send({ code: 1, msg: 'login first pls' })
+    } else {
+      const { username, type, _id } = oldUser
+      const data = Object.assign(user, { username, type, _id })
+      res.send({ code: 0, data })
     }
   })
 })
@@ -73,14 +81,15 @@ router.post('/update',(req,res) => {
  * 1) success: {code: 0, data: user}
  * 2) fail: {code: 1, msg: 'login first pls'}
  */
-router.get('/getUser',(req,res) => {
-  const {userId} = req.cookies
-  if (!userId){
-    res.send({code:1,msg:'login first pls'})
+router.get(baseURl + '/getUser', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { userId } = req.cookies
+  if (!userId) {
+    res.send({ code: 1, msg: 'login first pls' })
     return
   }
-  UserModel.findOne({_id:userId},filter,(error,user) => {
-    res.send({code:0,data:user})
+  UserModel.findOne({ _id: userId }, filter, (error, user) => {
+    res.send({ code: 0, data: user })
   })
 })
 /**
@@ -88,11 +97,12 @@ router.get('/getUser',(req,res) => {
  * 1) success: {code: 0, data: user}
  *
  */
-router.get('/userList',(req,res) => {
-  const {type} = req.query
-  UserModel.find({type},filter,(error,users) => {
-    if (!error){}
-    res.send({code:0,data:users})
+router.get(baseURl + '/userList', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { type } = req.query
+  UserModel.find({ type }, filter, (error, users) => {
+    if (!error) { }
+    res.send({ code: 0, data: users })
   })
 })
 
@@ -101,15 +111,16 @@ router.get('/userList',(req,res) => {
  * 1) success:
  *
  */
-router.get('/msgList',(req,res) => {
-  const {userId} = req.cookies
-  UserModel.find((error,userArray) => {
-    const users = userArray.reduce((users,{username,header,_id}) => {
-      users[_id] = {username,header}
+router.get(baseURl + '/msgList', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { userId } = req.cookies
+  UserModel.find((error, userArray) => {
+    const users = userArray.reduce((users, { username, header, _id }) => {
+      users[_id] = { username, header }
       return users
-    },{})
-    ChatModel.find({'$or': [{from: userId}, {to: userId}]}, filter, function (err, chatMsgs) {
-      res.send({code: 0, data: {users, chatMsgs}})
+    }, {})
+    ChatModel.find({ '$or': [{ from: userId }, { to: userId }] }, filter, function (err, chatMsgs) {
+      res.send({ code: 0, data: { users, chatMsgs } })
     })
   })
 })
@@ -118,15 +129,15 @@ router.get('/msgList',(req,res) => {
  * 1) success: {code: 0, data: 2}
  *
  */
-router.post('/readMsg', function (req, res) {
-
+router.post(baseURl + '/readMsg', function (req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   const from = req.body.from
   const to = req.cookies.userId
   console.log(to)
 
-  ChatModel.update({from, to, read: false}, {read: true}, {multi: true}, function (err, doc) {
+  ChatModel.update({ from, to, read: false }, { read: true }, { multi: true }, function (err, doc) {
     // console.log(doc)
-    res.send({code: 0, data: doc.nModified})
+    res.send({ code: 0, data: doc.nModified })
   })
 })
 

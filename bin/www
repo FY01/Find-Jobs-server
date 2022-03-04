@@ -5,7 +5,7 @@
  * @Author: FY01
  * @Date: 2021-07-31 11:19:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-02 11:20:09
+ * @LastEditTime: 2022-03-04 13:48:24
  */
 
 // #!/usr/bin / env node 
@@ -24,7 +24,7 @@ const http = require('http');
 // 开发端
 // const port = normalizePort(process.env.PORT || '4000');
 // 生产端
-const port = normalizePort(process.env.PORT || '80');
+const port = normalizePort('80');
 app.set('port', port);
 
 /**

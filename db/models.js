@@ -5,7 +5,7 @@
  * @Author: FY01
  * @Date: 2021-07-31 11:19:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-02 11:19:22
+ * @LastEditTime: 2022-03-04 13:47:44
  */
 /**
  * @Description: models:handle db's collection
@@ -18,7 +18,7 @@ const mongoose = require('mongoose')
 // 开发端
 // mongoose.connect('mongodb://localhost:27017/find-jobs')
 // server端数据库
-mongoose.connect('mongodb://0.0.0.0:20411/find-jobs')
+mongoose.connect('mongodb://root:123456@0.0.0.0:27017/find-jobs?authSource=admin', { useUnifiedTopology: true, useNewUrlParser: true })
 const conn = mongoose.connection
 conn.on('connected', () => {
     console.log('connect success! listening in port 80')
