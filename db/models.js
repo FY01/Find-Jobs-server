@@ -5,7 +5,7 @@
  * @Author: FY01
  * @Date: 2021-07-31 11:19:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-02 11:19:22
+ * @LastEditTime: 2022-03-02 20:20:08
  */
 /**
  * @Description: models:handle db's collection
@@ -16,12 +16,12 @@
 //1.连接到数据库
 const mongoose = require('mongoose')
 // 开发端
-// mongoose.connect('mongodb://localhost:27017/find-jobs')
+mongoose.connect('mongodb://localhost:27017/find-jobs')
 // server端数据库
-mongoose.connect('mongodb://0.0.0.0:20411/find-jobs')
+// mongoose.connect('mongodb://120.77.232.204:27017/find-jobs', { useNewUrlParser: true })
 const conn = mongoose.connection
 conn.on('connected', () => {
-    console.log('connect success! listening in port 80')
+    console.log('connect success! listening in port 4000')
 })
 
 //2.定义用户文档描述结构

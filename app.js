@@ -5,7 +5,7 @@
  * @Author: FY01
  * @Date: 2018-04-26 20:09:30
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-01 19:09:32
+ * @LastEditTime: 2022-03-02 11:29:44
  */
 const createError = require('http-errors');
 const express = require('express');
@@ -19,11 +19,14 @@ const usersRouter = require('./routes/users');
 const app = express();
 // 开启g-zip压缩
 const compression = require("compression")
+const cors = require("cors")
 
 // 使用中间件处理
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// 设置cors允许跨域
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
